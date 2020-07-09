@@ -1,0 +1,135 @@
+@namespace BlazorTable
+
+@if (AlwaysShow || (Table.TotalPages >= 1))
+{
+   
+
+    <div class="d-flex" style="justify-content: space-between;">
+        Showing @(String.Format("{0:n0}", this.Table.PageNumber * MaxPageSize + 1)) to
+        @if (this.Table.PageNumber == this.Table.TotalPages - 1)
+        {
+            <text>@(String.Format("{0:n0}", this.Table.TotalCount) + " of " + String.Format("{0:n0}", this.Table.TotalCount) + " entries")</text>
+        }
+        else
+        {
+            <text>@(String.Format("{0:n0}", (this.Table.PageNumber + 1) * MaxPageSize) + " of " + String.Format("{0:n0}", this.Table.TotalCount) + " entries")</text>
+        }
+        <div class="d-flex">
+            <ul class="pagination">
+                @if (ShowPageSizes)
+                {
+                    <li class="page-item" title="Set Page Size">
+                        <select class="form-control" value="@Table.PageSize" @onchange="SetPageSize">
+                            @foreach (int option in PageSizes)
+                            {
+                                <option value="@option">@option</option>
+                            }
+                        </select>
+                    </li>
+                }
+                <li class="page-item @(Table.PageNumber == 0 ? "disabled": "")" @onclick="@(() => Table.PreviousPage())" title="Previous">
+                    <a class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber == 0 ? "true": null)">Previous</a>
+                </li>
+
+                @if (Table.PageNumber > 3 && Table.PageNumber + 1 < Table.TotalPages - 3)
+                {
+                    <li class="page-item @(Table.PageNumber == 0 ? "disabled" : "")" @onclick="@(() => Table.FirstPage())" title="First">
+                        <a style="@(Table.PageNumber == 0 ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber == 0 ? "true" : null)">1</a>
+                    </li>
+
+                    <li aria-hidden="true" class="page-item disabled">
+                        <a class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">&nbsp;...</a>
+                    </li>
+                    <li class="page-item " @onclick="@(() => Table.GoToPage(Table.PageNumber - 1))" title="Go To Page">
+                        <a class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber == 0 ? "true" : null)">@(Table.PageNumber)</a>
+                    </li>
+
+                    @if (Table.PageNumber != Table.TotalPages - 1)
+                    {
+                        <li class="page-item disabled" title="Page @(Table.PageNumber + 1)/@(Table.TotalPages)">
+                            <a style="background-color: #337ab7; color: white;" class="page-link" href="" tabindex="-1" aria-disabled="true">@(Table.PageNumber + 1)</a>
+                        </li>
+                    }
+                    @if (Table.PageNumber < Table.TotalPages - 3)
+                    {
+                        <li class="page-item " @onclick="@(() => Table.GoToPage(Table.PageNumber + 1))" title="Go To Page">
+                            <a class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber == 0 ? "true" : null)">@(Table.PageNumber + 2)</a>
+                        </li>
+                        <li aria-hidden="true" class="page-item disabled">
+                            <a class="page-link" href="" tabindex="-1" aria-disabled="true">&nbsp;...</a>
+                        </li>
+                    }
+                    <li class="page-item @(Table.PageNumber + 1 != Table.TotalPages ? "" : "disabled")" @onclick="@(() => Table.LastPage())" title="Last Page">
+                        <a style="@(Table.PageNumber == Table.TotalPages - 1 ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber + 1 != Table.TotalPages ? null : "true")">@Table.TotalPages</a>
+                    </li>
+                    <li class="page-item @(Table.PageNumber + 1 < Table.TotalPages ? "" : "disabled")" @onclick="@(() => Table.NextPage())" title="Next Page">
+                        <a class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber + 1 < Table.TotalPages ? null : "true")">Next</a>
+                    </li>
+                }
+                else if ((Table.PageNumber + 1 > Table.TotalPages - 5) && Table.TotalPages > 4)
+                {
+                    <li class="page-item @(Table.PageNumber == 0 ? "disabled" : "")" @onclick="@(() => Table.FirstPage())" title="First">
+                        <a style="@(Table.PageNumber == 0 ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber == 0 ? "true" : null)">1</a>
+                    </li>
+                    <li aria-hidden="true" class="page-item disabled">
+                        <a class="page-link" href="" tabindex="-1" aria-disabled="true">&nbsp;...</a>
+                    </li>
+                    @for (int i = Table.TotalPages - 5; i < Table.TotalPages - 1; i++)
+                    {
+                        int index = i;
+                        <li @onclick="@(() => Table.GoToPage(index))" class="page-item" title="Page @(Table.PageNumber + 1)/@(Table.TotalPages)">
+                            <a style="@(Table.PageNumber == index ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">@(index + 1)</a>
+                        </li>
+                    }
+                    <li class="page-item @(Table.PageNumber + 1 != Table.TotalPages ? "" : "disabled")" @onclick="@(() => Table.LastPage())" title="Last">
+                        <a style="@(Table.PageNumber == Table.TotalPages - 1 ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber + 1 != Table.TotalPages ? null : "true")">@Table.TotalPages</a>
+                    </li>
+                    <li class="page-item @(Table.PageNumber + 1 < Table.TotalPages ? "" : "disabled")" @onclick="@(() => Table.NextPage())" title="Next">
+                        <a class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber + 1 < Table.TotalPages ? null: "true")">Next</a>
+                    </li>
+                }
+                else
+                {
+                    @for (int i = 0; i < 5 && i < Table.TotalPages - 1; i++)
+                    {
+                        int index = i;
+                        <li @onclick="@(() => Table.GoToPage(index))" class="page-item" title="Page @(Table.PageNumber + 1)/@(Table.TotalPages)">
+                            <a style="@(Table.PageNumber == index ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">@(index + 1)</a>
+                        </li>
+                    }
+                    @if (Table.TotalPages > 5)
+                    {
+                        <li aria-hidden="true" class="page-item disabled">
+                            <a class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">&nbsp;...</a>
+                        </li>
+                    }
+                    <li class="page-item @(Table.PageNumber + 1 != Table.TotalPages ? "" : "disabled")" @onclick="@(() => Table.LastPage())" title="Last">
+                        <a style="@(Table.PageNumber == Table.TotalPages - 1 ? "background-color: #337ab7; color: white;" : "")" class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber + 1 != Table.TotalPages ? null : "true")">@Table.TotalPages</a>
+                    </li>
+
+                    <li class="page-item @(Table.PageNumber + 1 < Table.TotalPages ? "" : "disabled")" @onclick="@(() => Table.NextPage())" title="Next">
+                        <a class="page-link" href="javascript:;" aria-disabled="@(Table.PageNumber + 1 < Table.TotalPages ? null: "true")">Next</a>
+                    </li>
+                }
+                @if (ShowPageNumber)
+                {
+                    <li class="page-item disabled" @onclick="@(() => Table.FirstPage())" title="Page @(Table.PageNumber + 1)/@(Table.TotalPages)">
+                        <a class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">@(Table.PageNumber + 1)/@(Table.TotalPages)</a>
+                    </li>
+                }
+                @if (ShowTotalCount)
+                {
+                    <li class="page-item disabled" @onclick="@(() => Table.FirstPage())" title="Total Items @Table.TotalCount">
+                        <a class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">@Table.TotalCount</a>
+                    </li>
+                }
+                @if (ShowPageNumber || ShowTotalCount)
+                {
+                    <li aria-hidden="true" class="page-item disabled">
+                        <a class="page-link" href="javascript:void(0);" tabindex="-1" aria-disabled="true">&nbsp;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
