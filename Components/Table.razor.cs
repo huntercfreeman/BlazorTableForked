@@ -74,6 +74,8 @@ namespace BlazorTable
                 int prevPageSize = _pageSize;
                 _pageSize = value;
 
+                if (_pageSize == 0) _pageSize = 1;
+
                 PageNumber = prevPageSize * (PageNumber) / _pageSize;
 
                 Update();
