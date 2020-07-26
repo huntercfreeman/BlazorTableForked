@@ -10,7 +10,14 @@ namespace BlazorTable
 {
     public partial class Table<TableItem> : ITable<TableItem>
     {
+        /// <summary>
+        /// Navigation manager
+        /// </summary>
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
         private const int DEFAULT_PAGE_SIZE = 10;
+
+        public string NewWorkflowText { get; set; } = "Create New Workflow";
 
         /// <summary>
         /// CSS for top most div
@@ -20,6 +27,12 @@ namespace BlazorTable
 
         [Parameter(CaptureUnmatchedValues = true)]
         public IReadOnlyDictionary<string, object> UnknownParameters { get; set; }
+
+        /// <summary>
+        /// Table title
+        /// </summary>
+        [Parameter]
+        public string TableTitle { get; set; }
 
         /// <summary>
         /// Page Size Options
@@ -66,9 +79,9 @@ namespace BlazorTable
         /// Page Size, defaults to 10
         /// </summary>
         [Parameter]
-        public int PageSize 
+        public int PageSize
         {
-            get => _pageSize; 
+            get => _pageSize;
             set
             {
                 int prevPageSize = _pageSize;
@@ -82,11 +95,24 @@ namespace BlazorTable
             }
         }
 
+        [Parameter]
+        public string TableId { get; set; }
+
+        protected void NavigateToWorkflows()
+        {
+            NewWorkflowText = "Loading...";
+            Update();
+            NavigationManager.NavigateTo("dtk/wfnew", true);
+        }
+
         /// <summary>
         /// Allow Columns to be reordered
         /// </summary>
         [Parameter]
         public bool ColumnReorder { get; set; }
+
+        [Parameter]
+        public bool ShowNewWorkflowButton { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -108,14 +134,14 @@ namespace BlazorTable
         /// Search all columns for the specified string, supports spaces as a delimiter
         /// </summary>
         [Parameter]
-        public string GlobalSearch 
+        public string GlobalSearch
         {
             get => _globalSearch;
             set
             {
                 _globalSearch = value;
                 Update();
-            } 
+            }
         }
 
         [Inject]
@@ -279,7 +305,7 @@ namespace BlazorTable
 
         public void GoToPage(int page)
         {
-            if(page + 1 < TotalPages)
+            if (page + 1 < TotalPages)
             {
                 PageNumber = page;
                 detailsViewOpen.Clear();
