@@ -24,11 +24,16 @@
 
             @if (!String.IsNullOrWhiteSpace(TableTitle))
             {
-                <div class="col-10" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
-                    @TableTitle
-                </div>
-                @if (ShowChangePageSizeDropdown)
+                @if (ShowChangePageSizeDropdown && ExtraContent != null)
                 {
+                    <div class="col-8" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
+                        @TableTitle
+                    </div>
+
+                    <div class="col-2" style="display: inline-flex;">
+                        @ExtraContent
+                    </div>
+
                     <div class="col-2" style="display: inline-flex;">
                         <span>Show&nbsp;</span>
                         <select @bind="PageSize" class="form-control form-control-sm">
@@ -40,6 +45,37 @@
                         </select>
                         <span>&nbsp;entries</span>
                     </div>
+
+
+
+
+                }
+                else
+                {
+                    <div class="col-10" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
+                        @TableTitle
+                    </div>
+                    @if (ExtraContent != null)
+                    {
+                        <div class="col-2" style="display: inline-flex;">
+                            @ExtraContent
+                        </div>
+                    }
+                    @if (ShowChangePageSizeDropdown)
+                    {
+                        <div class="col-2" style="display: inline-flex;">
+                            <span>Show&nbsp;</span>
+                            <select @bind="PageSize" class="form-control form-control-sm">
+                                @foreach (int pageSizeOption in PageSizeOptions)
+                                {
+                                    <option>@pageSizeOption</option>
+                                }
+                                <option label="All" value="@(Items == null ? 0 : Items.Count())">All</option>
+                            </select>
+                            <span>&nbsp;entries</span>
+                        </div>
+                    }
+
                 }
             }
             else if (ShowChangePageSizeDropdown)
@@ -268,7 +304,12 @@
             </table>
 
         </div>
-
+        <CascadingValue Value="(ITable<TableItem>)this" Name="Table">
+            @if (PagerInside)
+            {
+                <Pager />
+            }
+        </CascadingValue>
     </div>
 }
 

@@ -542,6 +542,15 @@ namespace BlazorTable
         public bool ShowFooter { get; set; }
 
         /// <summary>
+        /// Pager Inside or not
+        /// </summary>
+        [Parameter]
+        public bool PagerInside { get; set; }
+
+        [Parameter]
+        public RenderFragment ExtraContent { get; set; }
+
+        /// <summary>
         /// Set Table Page Size
         /// </summary>
         /// <param name="pageSize"></param>
