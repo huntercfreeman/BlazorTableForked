@@ -15,7 +15,7 @@
             <div style="background-color: transparent; display: flex; align-items: center; width: 33%;" id="globalSearch">
                 <input type="text" class="form-control form-control-sm float-right" style="width:100%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
                 <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
-                <button style="position: absolute; display: flex; right: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
+                <button style="border-radius: 0; position: absolute; display: flex; right: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
             </div>
         </div>
     }
@@ -98,7 +98,7 @@
                     <div class="col-10" id="globalSearch">
                         <input type="text" class="form-control form-control-sm float-right" style="width:33%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
                         <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; top: 3px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
-                        <button style="position: absolute; display: flex; right: 15px; top: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
+                        <button style="border-radius: 0; position: absolute; display: flex; right: 15px; top: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
                     </div>
                 }
             }
@@ -109,7 +109,7 @@
                     <div class="col-12" id="globalSearch">
                         <input type="text" class="form-control form-control-sm float-right" style="width:33%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
                         <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; top: 3px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
-                        <button style="        position: absolute;
+                        <button style="border-radius:0;        position: absolute;
         display: flex;
         right: 15px;
         top: 0;
