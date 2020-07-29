@@ -10,7 +10,7 @@
     {
         <div style="display: flex; justify-content: space-between;">
             <div>
-                <a href="javascript:void(0);" class="btn btn-primary change-view-btns " @onclick="NavigateToWorkflows">@NewWorkflowText</a>
+                <a href="javascript:void(0);" class="btn btn-primary change-view-btns " @onclick="NavigateToWorkflows">@((MarkupString)NewWorkflowText)</a>
             </div>
             <div style="background-color: transparent; display: flex; align-items: center; width: 33%;" id="globalSearch">
                 <input type="text" class="form-control form-control-sm float-right" style="width:100%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
