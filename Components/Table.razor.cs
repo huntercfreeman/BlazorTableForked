@@ -100,7 +100,7 @@ namespace BlazorTable
 
         protected void NavigateToWorkflows()
         {
-            NewWorkflowText = "Loading...";
+            NewWorkflowText = "<i class='fa fa-spinner fa-spin fa-1x fa-fw'></i>&nbsp;Loading...";
             Update();
             NavigationManager.NavigateTo("dtk/wfnew", true);
         }
