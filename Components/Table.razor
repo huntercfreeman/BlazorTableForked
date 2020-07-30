@@ -30,11 +30,11 @@
                         @TableTitle
                     </div>
 
-                    <div class="col-4 col-md-2" style="display: inline-flex;">
+                    <div class="col-4 col-md-2" style="display: flex; justify-content: flex-end;">
                         @ExtraContent
                     </div>
 
-                    <div class="col-4 col-md-2" style="display: inline-flex;">
+                    <div class="col-4 col-md-2" style="display: flex; justify-content: flex-end;">
                         <span>Show&nbsp;</span>
                         <select @bind="PageSize" class="form-control form-control-sm">
                             @foreach (int pageSizeOption in PageSizeOptions)
@@ -52,18 +52,18 @@
                 }
                 else
                 {
-                    <div class="col-10" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
+                    <div class="col-8" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
                         @TableTitle
                     </div>
                     @if (ExtraContent != null)
                     {
-                        <div class="col-2" style="display: inline-flex;">
+                        <div class="col-4" style="display: flex; justify-content: flex-end;">
                             @ExtraContent
                         </div>
                     }
                     @if (ShowChangePageSizeDropdown)
                     {
-                        <div class="col-2" style="display: inline-flex;">
+                        <div class="col-4" style="display: flex; justify-content: flex-end;">
                             <span>Show&nbsp;</span>
                             <select @bind="PageSize" class="form-control form-control-sm">
                                 @foreach (int pageSizeOption in PageSizeOptions)
@@ -80,7 +80,7 @@
             }
             else if (ShowChangePageSizeDropdown)
             {
-                <div class="col-2" style="display: inline-flex;">
+                <div class="col-4" style="display: flex; justify-content: flex-end;">
                     <span>Show&nbsp;</span>
                     <select @bind="PageSize" class="form-control form-control-sm">
                         @foreach (int pageSizeOption in PageSizeOptions)
