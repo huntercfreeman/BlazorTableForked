@@ -29,6 +29,18 @@ namespace BlazorTable
         public IReadOnlyDictionary<string, object> UnknownParameters { get; set; }
 
         /// <summary>
+        /// RenderFragment that goes to the left of the searchbar and above the table
+        /// </summary>
+        [Parameter]
+        public RenderFragment AboveTableTemplate { get; set; }
+
+        /// <summary>
+        /// RenderFragment that goes in the top right of the table
+        /// </summary>
+        [Parameter]
+        public RenderFragment ExtraTopRightTemplate { get; set; }
+
+        /// <summary>
         /// Table title
         /// </summary>
         [Parameter]
@@ -542,13 +554,10 @@ namespace BlazorTable
         public bool ShowFooter { get; set; }
 
         /// <summary>
-        /// Pager Inside or not
+        /// Show pager or not
         /// </summary>
         [Parameter]
-        public bool PagerInside { get; set; }
-
-        [Parameter]
-        public RenderFragment ExtraContent { get; set; }
+        public bool ShowPager { get; set; }
 
         /// <summary>
         /// Set Table Page Size

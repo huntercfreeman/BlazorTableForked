@@ -6,81 +6,36 @@
 @if (Columns.Any())
 {
     var columnCount = Columns.Count + (_detailTemplate != null ? 1 : 0);
-    @if (!String.IsNullOrWhiteSpace(TableTitle) && ShowNewWorkflowButton)
+    @if (ShowSearchBar || AboveTableTemplate != null)
     {
         <div style="display: flex; justify-content: space-between;">
-            <div>
-                <a href="javascript:void(0);" class="btn btn-primary change-view-btns " @onclick="NavigateToWorkflows">@((MarkupString)NewWorkflowText)</a>
-            </div>
-            <div style="background-color: transparent; display: flex; align-items: center; width: 33%;" id="globalSearch">
-                <input type="text" class="form-control form-control-sm float-right" style="width:100%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
-                <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
-                <button style="border-radius: 0; position: absolute; display: flex; right: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
-            </div>
+            @AboveTableTemplate
+            @if (ShowSearchBar)
+            {
+                <div style="background-color: transparent; display: flex; align-items: center; width: 33%;" id="globalSearch">
+                    <input type="text" class="form-control form-control-sm float-right" style="width:100%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
+                    <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
+                    <button style="border-radius: 0; position: absolute; display: flex; right: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
+                </div>
+            }
         </div>
     }
     <div class="card" id="@TableId" style="background-color: white; box-shadow: 0px 3px 6px #00000029; opacity: 1; border-radius: 14px;">
         <div class="row">
+            <div class="col-8" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
+                @TableTitle
+            </div>
 
-            @if (!String.IsNullOrWhiteSpace(TableTitle))
-            {
-                @if (ShowChangePageSizeDropdown && ExtraContent != null)
+            <div class="col-4 col-md-2" style="display: flex; justify-content: flex-end;">
+                @if (ExtraTopRightTemplate != null)
                 {
-                    <div class="col-8" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
-                        @TableTitle
-                    </div>
-
-                    <div class="col-4 col-md-2" style="display: flex; justify-content: flex-end;">
-                        @ExtraContent
-                    </div>
-
-                    <div class="col-4 col-md-2" style="display: flex; justify-content: flex-end;">
-                        <span>Show&nbsp;</span>
-                        <select @bind="PageSize" class="form-control form-control-sm">
-                            @foreach (int pageSizeOption in PageSizeOptions)
-                            {
-                                <option>@pageSizeOption</option>
-                            }
-                            <option label="All" value="@(Items == null ? 0 : Items.Count())">All</option>
-                        </select>
-                        <span>&nbsp;entries</span>
-                    </div>
-
-
-
-
+                    @ExtraTopRightTemplate
                 }
-                else
-                {
-                    <div class="col-8" style="display: inline-flex; color: #B2B2B2; font-size:30px;">
-                        @TableTitle
-                    </div>
-                    @if (ExtraContent != null)
-                    {
-                        <div class="col-4" style="display: flex; justify-content: flex-end;">
-                            @ExtraContent
-                        </div>
-                    }
-                    @if (ShowChangePageSizeDropdown)
-                    {
-                        <div class="col-4" style="display: flex; justify-content: flex-end;">
-                            <span>Show&nbsp;</span>
-                            <select @bind="PageSize" class="form-control form-control-sm">
-                                @foreach (int pageSizeOption in PageSizeOptions)
-                                {
-                                    <option>@pageSizeOption</option>
-                                }
-                                <option label="All" value="@(Items == null ? 0 : Items.Count())">All</option>
-                            </select>
-                            <span>&nbsp;entries</span>
-                        </div>
-                    }
+            </div>
 
-                }
-            }
-            else if (ShowChangePageSizeDropdown)
+            @if (ShowChangePageSizeDropdown)
             {
-                <div class="col-4" style="display: flex; justify-content: flex-end;">
+                <div class="col-4 col-md-2" style="display: flex; justify-content: flex-end;">
                     <span>Show&nbsp;</span>
                     <select @bind="PageSize" class="form-control form-control-sm">
                         @foreach (int pageSizeOption in PageSizeOptions)
@@ -91,37 +46,8 @@
                     </select>
                     <span>&nbsp;entries</span>
                 </div>
-
-
-                @if (ShowSearchBar)
-                {
-                    <div class="col-10" id="globalSearch">
-                        <input type="text" class="form-control form-control-sm float-right" style="width:33%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
-                        <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; top: 3px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
-                        <button style="border-radius: 0; position: absolute; display: flex; right: 15px; top: 0; height: 30px;" class="btn btn-primary"><i style="color: white;" class="fas fa-search"></i></button>
-                    </div>
-                }
-            }
-            else
-            {
-                if (ShowSearchBar)
-                {
-                    <div class="col-12" id="globalSearch">
-                        <input type="text" class="form-control form-control-sm float-right" style="width:33%" @onfocusout="(async () => { await Task.Delay(100); SearchFocused = false; StateHasChanged(); })" @onfocusin="(() => { SearchFocused = true; StateHasChanged(); })" @bind="GlobalSearch" @bind:event="oninput" placeholder="Search..." />
-                        <span @onclick="(() => { GlobalSearch = string.Empty; Update(); })" style="position: absolute; right: 69px; top: 3px; cursor: pointer; @(SearchFocused ? "" : "display: none;")">X</span>
-                        <button style="border-radius:0;        position: absolute;
-        display: flex;
-        right: 15px;
-        top: 0;
-        height: 30px;" class="btn btn-primary">
-                            <i style="color: white;" class="fas fa-search"></i>
-                        </button>
-                    </div>
-                }
             }
         </div>
-
-
         <div class="dataTableWrapper table-responsive @WorkflowCSS">
             <table aria-readonly="@(IsEditMode ? "false" : "true")" role="grid" class="@TableClass" @attributes="UnknownParameters">
 
@@ -304,12 +230,13 @@
             </table>
 
         </div>
-        <CascadingValue Value="(ITable<TableItem>)this" Name="Table">
-            @if (PagerInside)
-            {
+
+        @if (ShowPager)
+        {
+            <CascadingValue Value="(ITable<TableItem>)this" Name="Table">
                 <Pager />
-            }
-        </CascadingValue>
+            </CascadingValue>
+        }
     </div>
 }
 
